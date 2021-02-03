@@ -9,10 +9,12 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   Share,
+  
 
 } from 'react-native';
 
-import CameraRoll from "@react-native-community/cameraroll";
+//import CameraRoll from "@react-native-community/cameraroll";
+import * as MediaLibrary from 'expo-media-library';
 
 
 import * as Permissions from 'expo-permissions';
@@ -72,9 +74,9 @@ export default class App extends React.Component {
 
 
   saveToCameraRoll = async image => {
-    let cameraPermissions = await Permissions.getAsync(Permissions.CameraRoll);
+    let cameraPermissions = await Permissions.getAsync(Permissions.CAMERA_ROLL);
     if (cameraPermissions.status !== 'granted') {
-      cameraPermissions = await Permissions.askAsync(Permissions.CameraRoll);
+      cameraPermissions = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     }
 
     if (cameraPermissions.status === 'granted') {
@@ -83,7 +85,7 @@ export default class App extends React.Component {
         FileSystem.documentDirectory + image.id + '.jpg'
       )
         .then(({ uri }) => {
-          CameraRoll.saveToCameraRoll(uri);
+          MediaLibrary.saveToLibraryAsync(uri);
           alert('Saved to photos');
         })
         .catch(error => {
